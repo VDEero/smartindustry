@@ -1,8 +1,7 @@
 
 //MQTT Broker definitions
-const mqtt    = require('mqtt');
-const broker = 'mqtt://automaatio:Z0od2PZF65jbtcXu@automaatio.cloud.shiftr.io';
-//const broker = 'mqtt://test.mosquitto.org';
+const mqtt = require('mqtt');
+const broker = 'mqtt://test.mosquitto.org';
 const user = '';
 const pw = ''; 
 
@@ -13,7 +12,8 @@ mq = mqtt.connect(broker, {
 });
 
 //subscribe the topic
-mq.subscribe('automaatio/#');
+
+mq.subscribe('automaatio1');
 
 //dotify about successful connection
 mq.on('connect', function(){
@@ -23,9 +23,8 @@ mq.on('connect', function(){
 //API for MongoDB Atlas
 const { MongoClient, ServerApiVersion } = require('mongodb');
 
-// Replace the URI-string below by your own URI (get that from Mongo DB Atlas 
-// Connect > driver > NodeJs (v. 6.7), don't forget to add your own username & password to the string
-const uri = "mongodb+srv://eki:eki@cluster0.91fze.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"; 
+//korvaa alla oleva URI-string omalla URI:lla (hae se Mongo Atlaksen Connect-kohdasta, lisää myös oma käyttäjätunnus ja salasana)
+const uri = "mongodb+srv://eerokoponen_db:Metropolia123@cluster0.ctva8qr.mongodb.net/?appName=Cluster0"; 
 
 const client = new MongoClient(uri, {
   serverApi: {
@@ -44,8 +43,8 @@ mq.on('message', function(topic, message) {
 	obj = JSON.parse(message);
   
 	//DB and collection names are obtained from the message
-	var dbname = obj.db_name;
-	var collection = obj.coll_name;
+	var dbname = "GitHubToMongo"; // Tietokannan nimi
+  var collection = "Sensoridata";    // Kokoelman nimi
 
 	//timestamp is added
 	obj.DateTime = timeConverter(Date.now());
@@ -80,4 +79,3 @@ function timeConverter(UNIX_timestamp){
   var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
   return time;
 }
-
